@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import urllib2
 
 def FindHits(url, proxyUrl):
