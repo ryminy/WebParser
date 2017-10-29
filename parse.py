@@ -3,6 +3,7 @@
 import urllib2
 from bs4 import BeautifulSoup
 
+#Gets Name, Location, Data, ID and Price of an offer
 def printProduct(soup):
     #get name
     name_box = soup.find('h1')
