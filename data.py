@@ -5,17 +5,17 @@ fieldnames = ["ID", "PRICE", "DATE", "NAME", "LOCATION", "URL", "PARSE_DATE"]
 path = "data.csv"
 my_dict = []
 delimiterCsv = '~'
-currentDate = 0
-
+currentDate = ""
+reader = {}
 #Read as a dict so it is easier to search for columns.
 def csv_dict_reader(file_obj):
+    global reader
     try:
         with open(file_obj) as f_obj:
             reader = csv.DictReader(f_obj, delimiter='~')
     except Exception as e:
         print e
 
-    return reader
 
 #Writes as a dict so it is easier to search for columns.
 def csv_dict_writer(path, fieldnames, data):
@@ -36,8 +36,10 @@ def csv_write(data):
 
 #User API. Writes the header.
 def init_csv():
-    currentDate = datetime.datetime.now()
-    currentDate = (currentDate.strftime("%d-%m-%Y")).encode()
+    global currentDate
+    currentDate_raw = datetime.datetime.now()
+    currentDateLocal = (currentDate_raw.strftime("%d-%m-%Y")).encode()
+    currentDate = currentDateLocal
 
     with open(path, "wb") as out_file:
         writer = csv.DictWriter(out_file, delimiter = delimiterCsv, fieldnames=fieldnames)
@@ -49,7 +51,7 @@ def write_to_csv():
 
 #User API. It reads the dict saved in an cvs file.
 def read_csv():
-    reader = csv_dict_reader(path)
+    csv_dict_reader(path)
     return reader
 
 #
