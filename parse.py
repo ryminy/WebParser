@@ -9,8 +9,7 @@ def getURL(url):
     soup = BeautifulSoup(page, 'html.parser')
 
     print url
-    UniqueID = printProduct(soup)
-    return UniqueID
+    printProduct(soup)
 
 
 #Gets Name, Location, Data, ID and Price of an offer from a soup
@@ -42,7 +41,7 @@ def printProduct(soup):
     price = price_box.find('strong')
     print 'Price: ' + price.text.strip()
     print '##########################################################'
-    return UniqueID
+    return
 
 
 
