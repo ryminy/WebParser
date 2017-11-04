@@ -9,7 +9,7 @@ from bs4 import BeautifulSoup
 
 # specify the url
 proxyUrl = "http://31.14.40.113:3128"
-quote_page = 'https://www.olx.ro/oferte/q-poseta-dama/'
+quote_page = 'https://www.olx.ro/bucuresti/q-geanta-dama/'
 
 # query the website and return the html to the variable ‘page’
 page = FindHits(quote_page, proxyUrl)
@@ -28,6 +28,6 @@ for x in table.find_all('td',attrs={'class':'offer'}):
         url_attrs_dict = x.find('a').attrs
         #print url_attrs_dict['href']
 
-        getURL(url_attrs_dict['href'])
+        UniqueID = getURL(url_attrs_dict['href'])
     except:
         print "Ooops"
