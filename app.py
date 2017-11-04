@@ -3,6 +3,7 @@
 # import libraries
 from parse import printProduct
 from proxys import FindHits
+from parse import *
 import urllib2
 from bs4 import BeautifulSoup
 
@@ -21,9 +22,12 @@ for x in table.find_all('td',attrs={'class':'offer'}):
     try:
         # print ID
         table_attrs_dict = x.find('table').attrs
-        print table_attrs_dict['data-id']
+        #print table_attrs_dict['data-id']
+
         # print Url
         url_attrs_dict = x.find('a').attrs
-        print url_attrs_dict['href']
+        #print url_attrs_dict['href']
+
+        getURL(url_attrs_dict['href'])
     except:
         print "Ooops"
