@@ -7,6 +7,7 @@ from parse import *
 import urllib2
 from bs4 import BeautifulSoup
 import time
+from data import init_csv, write_to_csv, read_csv
 
 # specify the url
 proxyUrl = "http://31.14.40.113:3128"
@@ -25,14 +26,18 @@ numOffers = numOffers_box.text.split()[2]
 printedOffers = 0
 pageNum = 1
 
-while (printedOffers < numOffers):
+init_csv()
+
+while (printedOffers < int(numOffers)):
     pageNum = pageNum +1
 
     for x in table.find_all('td',attrs={'class':'offer'}):
         printedOffers = printedOffers + 1
+        print 'Printing %d out of %s, next page %d' % (printedOffers, numOffers, pageNum)
+
         try:
             # print ID
-            table_attrs_dict = x.find('table').attrs
+            #table_attrs_dict = x.find('table').attrs
             #print table_attrs_dict['data-id']
 
             # print Url
@@ -41,11 +46,11 @@ while (printedOffers < numOffers):
             getURL(url_attrs_dict['href'])
 
             #sleep for 2 seconds so that you do not flood the website
-            time.sleep(1)
+            time.sleep(2)
+            #exit()
 
         except:
             print "Ooops"
-
     #change the URL so that you can move to the next page of offers
     newPage = quote_page + '?page=' + str(pageNum)
     # query the website and return the html to the variable ‘page’
@@ -55,4 +60,7 @@ while (printedOffers < numOffers):
     soup = BeautifulSoup(page, 'html.parser')
     table = soup.find('table', attrs={'id': 'offers_table'})
 
-    print 'Printed %d out of %s, next page %d' % (printedOffers,numOffers, pageNum)
+    write_to_csv()
+    reader = read_csv()
+
+    exit()

@@ -3,17 +3,20 @@
 # import libraries
 import urllib2
 from bs4 import BeautifulSoup
+from data import csv_write
 
 def getURL(url):
     page = urllib2.urlopen(url)
     soup = BeautifulSoup(page, 'html.parser')
 
-    print url
-    printProduct(soup)
+    printProduct(soup,url)
 
 
 #Gets Name, Location, Data, ID and Price of an offer from a soup
-def printProduct(soup):
+def printProduct(soup,url):
+    #print url
+    print url
+
     #get name
     name_box = soup.find('h1')
     name = name_box.text.strip()
@@ -22,7 +25,8 @@ def printProduct(soup):
     #get location
     location_box = soup.find('a', attrs={'class':'show-map-link'})
     location = location_box.find('strong')
-    print 'Location: ' + location.text.strip()
+    locationText = location.text.strip()
+    print 'Location: ' + locationText
 
     #get timestamp
     timestamp_box = soup.find('em')
@@ -39,10 +43,14 @@ def printProduct(soup):
     #get price
     price_box = soup.find('div', attrs={'class':'price-label'})
     price = price_box.find('strong')
-    print 'Price: ' + price.text.strip()
+    priceText = price.text.strip()
+    print 'Price: ' + priceText
     print '##########################################################'
-    return
 
+    #fieldnames = ["ID", "PRICE", "DATE", "NAME", "LOCATION", "URL"]
+    #encode each string as it will be converted from unicode to ascii
+    csv_write([UniqueID.encode(), priceText.encode(), timestamp.encode(), name.encode(), locationText.encode(), url.encode()])
+    return
 
 
 
