@@ -6,13 +6,12 @@ path = "data.csv"
 my_dict = []
 delimiterCsv = '~'
 currentDate = ""
-reader = {}
 #Read as a dict so it is easier to search for columns.
 def csv_dict_reader(file_obj):
-    global reader
     try:
         with open(file_obj) as f_obj:
             reader = csv.DictReader(f_obj, delimiter='~')
+            return reader
     except Exception as e:
         print e
 
@@ -51,8 +50,9 @@ def write_to_csv():
 
 #User API. It reads the dict saved in an cvs file.
 def read_csv():
-    csv_dict_reader(path)
-    return reader
+    reader_x = csv_dict_reader(path)
+    print reader_x
+    return reader_x
 
 #
 # if __name__ == "__main__":

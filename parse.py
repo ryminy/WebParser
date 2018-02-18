@@ -3,22 +3,24 @@
 # import libraries
 import urllib2
 from bs4 import BeautifulSoup
-from data import csv_write
+
+import time
+
 from proxys import FindHits
-from data import *
 
 proxyUrl = "http://31.14.40.113:3128"
-debugOfferValue = 2
+debugOfferValue = 20
 
-def getURL(url):
-    page = urllib2.urlopen(url)
+def getURL(url,csvObj):
+
+    page = FindHits(url,"")
     soup = BeautifulSoup(page, 'html.parser')
 
-    printProduct(soup,url)
+    printProduct(soup,url,csvObj)
 
 
 #Gets Name, Location, Data, ID and Price of an offer from a soup
-def printProduct(soup,url):
+def printProduct(soup,url,csvObj):
     #print url
     print url
 
@@ -54,13 +56,14 @@ def printProduct(soup,url):
 
     #fieldnames = ["ID", "PRICE", "DATE", "NAME", "LOCATION", "URL"]
     #encode each string as it will be converted from unicode to ascii
-    csv_write([UniqueID.encode(), priceText.encode(), timestamp.encode(), name.encode(), locationText.encode(), url.encode()])
+    csvObj.csv_write([UniqueID.encode(), priceText.encode(), timestamp.encode(), name.encode(), locationText.encode(), url.encode()])
     return
 
-def startCrawling(quote_page):
+def startCrawling(quote_page, csvObj):
     # query the website and return the html to the variable ‘page’
-    page = FindHits(quote_page, proxyUrl)
+    page = FindHits(quote_page,"")
 
+    #page = urllib2.urlopen(quote_page)
     # parse the html using beautiful soap and store in variable `soup`
     soup = BeautifulSoup(page, 'html.parser')
 
@@ -77,14 +80,12 @@ def startCrawling(quote_page):
     else:
         maxOffers = int(numOffers)
 
-    print maxOffers
-    init_csv()
-
     while (printedOffers < maxOffers):
         pageNum = pageNum + 1
 
         for x in table.find_all('td', attrs={'class': 'offer'}):
             printedOffers = printedOffers + 1
+
             if printedOffers > maxOffers:
                 break
             print 'Printing %d out of %s, next page %d' % (printedOffers, numOffers, pageNum)
@@ -96,15 +97,16 @@ def startCrawling(quote_page):
 
                 # print Url
                 url_attrs_dict = x.find('a').attrs
-                # print url_attrs_dict['href']
-                getURL(url_attrs_dict['href'])
+                getURL(url_attrs_dict['href'],csvObj)
 
                 # sleep for 2 seconds so that you do not flood the website
-                time.sleep(2)
+                time.sleep(5)
                 # exit()
 
-            except:
+            except Exception as e:
                 print "Ooops"
+                print e
+
         # change the URL so that you can move to the next page of offers
         newPage = quote_page + '?page=' + str(pageNum)
         # query the website and return the html to the variable ‘page’
@@ -114,6 +116,6 @@ def startCrawling(quote_page):
         soup = BeautifulSoup(page, 'html.parser')
         table = soup.find('table', attrs={'id': 'offers_table'})
 
-        write_to_csv()
+        csvObj.write_to_csv()
 
 

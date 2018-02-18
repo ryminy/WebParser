@@ -2,14 +2,13 @@
 # coding=utf-8
 # import libraries
 from parse import startCrawling
-from data import read_csv
+from csvClass import csvClass
 
 # specify the url
 quote_page = 'https://www.olx.ro/bucuresti/q-geanta-dama/'
 
-#startCrawling(quote_page)
+csvObj = csvClass()
 
-reader = read_csv()
-print reader
-for line in reader:
-    print line
+startCrawling(quote_page, csvObj)
+
+csvObj.print_csv()
