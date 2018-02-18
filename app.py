@@ -7,7 +7,7 @@ from csvClass import csvClass
 # specify the url
 quote_page = 'https://www.olx.ro/bucuresti/q-geanta-dama/'
 
-csvObj = csvClass()
+csvObj = csvClass("")
 
 startCrawling(quote_page, csvObj)
 

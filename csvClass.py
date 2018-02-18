@@ -4,36 +4,37 @@ import datetime
 class csvClass:
     fieldnames = ["ID", "PRICE", "DATE", "NAME", "LOCATION", "URL", "PARSE_DATE"]
     path = "data.csv"
-    write_dict = []
-    read_dict = []
     delimiterCsv = '~'
     currentDate = ""
 
-    def __init__(self):
+    def __init__(self, path):
         currentDate_raw = datetime.datetime.now()
         currentDateLocal = (currentDate_raw.strftime("%d-%m-%Y")).encode()
         self.currentDate = currentDateLocal
 
+        if len(path) > 0:
+            self.path = path
+        #clear the file each time
+        open(self.path, 'w').close()
+
     def csv_write(self, data):
         data.append(self.currentDate)
         inner_dict = dict(zip(self.fieldnames, data))
-        self.write_dict.append(inner_dict)
 
-    def write_to_csv(self):
-        with open(self.path, "wb") as out_file:
+        with open(self.path, "ab") as out_file:
             writer = csv.DictWriter(out_file, delimiter=self.delimiterCsv, fieldnames=self.fieldnames)
-            writer.writeheader()
             try:
-                for row in self.write_dict:
-                    writer.writerow(row)
+                writer.writerow(inner_dict)
             except Exception as e:
                 print e
 
     def print_csv(self):
+        read_dict = []
+
         try:
             with open(self.path) as in_file:
-                self.read_dict = csv.DictReader(in_file, delimiter=self.delimiterCsv, fieldnames=self.fieldnames)
-                for row in self.read_dict:
+                read_dict = csv.DictReader(in_file, delimiter=self.delimiterCsv, fieldnames=self.fieldnames)
+                for row in read_dict:
                    print row
         except Exception as e:
             print e
