@@ -9,7 +9,7 @@ import time
 from proxys import FindHits
 
 proxyUrl = "http://31.14.40.113:3128"
-debugOfferValue = 20
+debugOfferValue = 2
 
 def getURL(url,csvObj):
 
@@ -116,6 +116,6 @@ def startCrawling(quote_page, csvObj):
         soup = BeautifulSoup(page, 'html.parser')
         table = soup.find('table', attrs={'id': 'offers_table'})
 
-        csvObj.write_to_csv()
+      #  csvObj.write_to_csv()
 
 

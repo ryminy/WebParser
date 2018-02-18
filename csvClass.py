@@ -14,10 +14,23 @@ class csvClass:
         currentDateLocal = (currentDate_raw.strftime("%d-%m-%Y")).encode()
         self.currentDate = currentDateLocal
 
+        #clear the file each time
+        open(self.path, 'w').close()
+
     def csv_write(self, data):
         data.append(self.currentDate)
         inner_dict = dict(zip(self.fieldnames, data))
-        self.write_dict.append(inner_dict)
+
+        with open(self.path, "ab") as out_file:
+            writer = csv.DictWriter(out_file, delimiter=self.delimiterCsv, fieldnames=self.fieldnames)
+            try:
+                writer.writerow(inner_dict)
+            except Exception as e:
+                print e
+
+#        data.append(self.currentDate)
+#        inner_dict = dict(zip(self.fieldnames, data))
+#        self.write_dict.append(inner_dict)
 
     def write_to_csv(self):
         with open(self.path, "wb") as out_file:
