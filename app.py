@@ -11,4 +11,6 @@ csvObj = csvClass("")
 
 startCrawling(quote_page, csvObj)
 
-csvObj.print_csv()
+#csvObj.print_csv()
+
+csvObj.clearDuplicates()
