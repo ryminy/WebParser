@@ -3,10 +3,11 @@ import datetime
 
 class csvClass:
     fieldnames = ["ID", "PRICE", "DATE", "NAME", "LOCATION", "URL", "PARSE_DATE"]
-    path = "data.csv"
+    path = "data"
     delimiterCsv = '~'
     currentDate = ""
     noDuplicateEntries = []
+    write1stTime = 0
 
     def __init__(self, path):
         currentDate_raw = datetime.datetime.now()
@@ -15,8 +16,8 @@ class csvClass:
 
         if len(path) > 0:
             self.path = path
-        #clear the file each time
-        open(self.path, 'w').close()
+        self.path = "".join((self.path, self.currentDate))
+        self.path = "".join((self.path, ".csv"))
 
     def saveNoDuplicates(self):
         #clear the file each time
@@ -28,6 +29,10 @@ class csvClass:
             self.csv_write(row, dictFlag);
 
     def csv_write(self, data, dictFlag = 0):
+        if self.write1stTime == 0:
+            self.write1stTime = 1
+            # clear the file each time
+            open(self.path, 'w').close()
 
         if dictFlag == 0:
             data.append(self.currentDate)
